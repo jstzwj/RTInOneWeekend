@@ -20,26 +20,27 @@ enum ImageType
 class Image
 {
 private:
-    std::int32_t height;
     std::int32_t width;
+    std::int32_t height;
+
     const std::int32_t channel = 3;
     std::vector<unsigned char> data;
 
 public:
-    Image(int height, int width)
-        : height(height), width(width), data(width * height * channel)
+    Image(int width, int height)
+        : width(width), height(height), data(width * height * channel)
     {
     }
 
-    void set_color(int h, int w, color c)
+    void set_color(int w, int h, color c)
     {
         h = height - 1 - h;
         data[h * width * channel + w * channel] = static_cast<unsigned char>(255.999 * c.x());
-        data[h * width * channel + w* channel + 1] = static_cast<unsigned char>(255.999 * c.y());
+        data[h * width * channel + w * channel + 1] = static_cast<unsigned char>(255.999 * c.y());
         data[h * width * channel + w * channel + 2] = static_cast<unsigned char>(255.999 * c.z());
     }
 
-    color get_color(int h, int w)
+    color get_color(int w, int h)
     {
         h = height - 1 - h;
         return color(
