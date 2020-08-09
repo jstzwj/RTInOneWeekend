@@ -12,6 +12,7 @@ add_subdirectory(contrib)
 
 include_directories(contrib/stb/include)
 include_directories(contrib/indicators/single_include)
+include_directories(contrib/taskflow)
 include_directories(include)
 
 
