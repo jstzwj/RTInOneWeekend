@@ -1,8 +1,8 @@
 #ifndef CAMERA_H_
 #define CAMERA_H_
 
-#include <vec3.h>
-#include <ray.h>
+#include <HanRender/vec3.h>
+#include <HanRender/ray.h>
 
 class camera
 {

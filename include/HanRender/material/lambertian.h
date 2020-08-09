@@ -1,10 +1,10 @@
 #ifndef MATERIAL_LAMBERTIAN_H_
 #define MATERIAL_LAMBERTIAN_H_
 
-#include <hittable.h>
-#include <ray.h>
-#include <vec3.h>
-#include <material/material.h>
+#include <HanRender/hittable.h>
+#include <HanRender/ray.h>
+#include <HanRender/vec3.h>
+#include <HanRender/material/material.h>
 
 class lambertian : public material
 {

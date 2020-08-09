@@ -8,7 +8,7 @@
 #include <cstdint>
 #include <vector>
 
-#include <vec3.h>
+#include <HanRender/vec3.h>
 
 enum ImageType
 {

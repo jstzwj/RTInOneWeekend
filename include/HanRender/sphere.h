@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include <hittable.h>
-#include <vec3.h>
+#include <HanRender/hittable.h>
+#include <HanRender/vec3.h>
 
 class material;
 
