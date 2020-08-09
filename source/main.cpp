@@ -2,38 +2,30 @@
 #include <vector>
 #include <cstdint>
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#define STB_IMAGE_WRITE_STATIC
-#include <stb/stb_image_write.h>
-
-#include "vec3.h"
+#include <vec3.h>
+#include <image.h>
 
 int main()
 {
-    const int width = 400;
+    const int width = 600;
     const int height = 400;
-    const int channel = 3;
 
-    std::cout << "start" << std::endl;
+    std::cout << "start rendering" << std::endl;
 
-    std::vector<unsigned char> image_data(width * height * channel);
-    int index = 0;
+    Image image(height, width);
     for (int j = height - 1; j >= 0; --j) {
         for (int i = 0; i < width; ++i) {
-            auto r = double(i) / (width - 1);
-            auto g = double(j) / (height - 1);
-            auto b = 0.25f;
+            auto r = static_cast<float>(i) / (width - 1);
+            auto g = static_cast<float>(j) / (height - 1);
+            auto b = 0.f;
 
-            int ir = static_cast<int>(255.999 * r);
-            int ig = static_cast<int>(255.999 * g);
-            int ib = static_cast<int>(255.999 * b);
-
-            image_data[index++] = (unsigned char)ir;
-            image_data[index++] = (unsigned char)ig;
-            image_data[index++] = (unsigned char)ib;
+            image.set_color(j, i, color(r, g, b));
         }
     }
 
-    stbi_write_bmp("out.bmp", width, height, 3, image_data.data());
+    image.write_to_file("out.bmp");
+
+    std::cout << "finish rendering" << std::endl;
+    
     return 0;
 }

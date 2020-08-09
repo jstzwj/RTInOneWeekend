@@ -6,4 +6,7 @@ add_subdirectory(contrib)
 
 include_directories(contrib)
 include_directories(include)
-add_executable(RTInOneWeekend source/main.cpp)
+
+
+file(GLOB HEADER_PATH ./include/*.h)
+add_executable(RTInOneWeekend source/main.cpp ${HEADER_PATH})
