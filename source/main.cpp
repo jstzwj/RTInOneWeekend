@@ -20,6 +20,7 @@
 #include <HanRender/hittable_list.h>
 #include <HanRender/material/lambertian.h>
 #include <HanRender/material/metal.h>
+#include <HanRender/material/dielectric.h>
 
 color ray_color(const ray &r, const hittable &world, int depth)
 {
@@ -30,13 +31,12 @@ color ray_color(const ray &r, const hittable &world, int depth)
 
     if (world.hit(r, 0.001, std::numeric_limits<double>::infinity(), rec))
     {
-        // point3 target = rec.p + rec.normal + random_unit_vector();
-        // return 0.5 * ray_color(ray(rec.p, target - rec.p), world, depth - 1);
-
         ray scattered;
         color attenuation;
         if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+        {
             return attenuation * ray_color(scattered, world, depth - 1);
+        }
         return color(0, 0, 0);
     }
 
@@ -53,24 +53,26 @@ int main()
     const auto aspect_ratio = 16.0 / 9.0;
     const int image_width = 800;
     const int image_height = static_cast<int>(image_width / aspect_ratio);
-    const int samples_per_pixel = 100;
+    const int samples_per_pixel = 10000;
 
     Image image(image_width, image_height);
 
     // materials
 
-    auto lambertian_mat_red = std::make_shared<lambertian>(color(0.5, 0, 0));
+    auto lambertian_mat_red = std::make_shared<lambertian>(color(0, 0, 0.3));
     auto lambertian_mat_white = std::make_shared<lambertian>(color(1, 1, 1));
     auto metal_mat_gray = std::make_shared<metal>(color(0.8, 0.8, 0.8), 0.3);
+    auto glass_mat = std::make_shared<dielectric>(1.3);
 
     // world
     hittable_list world;
     world.add(std::make_shared<sphere>(point3(0, 0, -1), 0.5, lambertian_mat_red));
     world.add(std::make_shared<sphere>(point3(-1, 0, -1), 0.5, metal_mat_gray));
+    world.add(std::make_shared<sphere>(point3(1, 0, -1), 0.5, glass_mat));
     world.add(std::make_shared<sphere>(point3(0, -100.5, -1), 100, lambertian_mat_white));
 
     // Camera
-    camera cam;
+    camera cam(point3(2, 2, 1), point3(0, 0, -1), vec3(0, 1, 0), 45.0, aspect_ratio);
 
     // render
     using namespace indicators;
@@ -90,7 +92,7 @@ int main()
 
     // taskflow
     tf::Executor executor;
-    const bool multi_thread = false;
+    const bool multi_thread = true;
 
     int progress_value = 0;
     int progress_total = image_width * image_height;
@@ -110,7 +112,7 @@ int main()
                         auto u = (i + random_double()) / (image_width - 1);
                         auto v = (j + random_double()) / (image_height - 1);
                         ray r = cam.get_ray(u, v);
-                        pixel_colors[s] += ray_color(r, world, 3);
+                        pixel_colors[s] += ray_color(r, world, 10);
                     },
                     4  // at least two items at a time
                 );
@@ -126,7 +128,7 @@ int main()
                     auto u = (i + random_double()) / (image_width - 1);
                     auto v = (j + random_double()) / (image_height - 1);
                     ray r = cam.get_ray(u, v);
-                    pixel_color += ray_color(r, world, 3);
+                    pixel_color += ray_color(r, world, 5);
                 }
             }
 

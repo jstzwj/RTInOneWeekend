@@ -25,4 +25,8 @@ inline double clamp(double x, double min, double max)
     return x;
 }
 
+inline double degrees_to_radians(double degrees) {
+    return degrees * 3.141592653589793238462 / 180.0;
+}
+
 #endif

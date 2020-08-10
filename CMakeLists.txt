@@ -16,5 +16,5 @@ include_directories(contrib/taskflow)
 include_directories(include)
 
 
-file(GLOB HEADER_PATH ./include/*.h)
+file(GLOB_RECURSE HEADER_PATH ./include/*.h)
 add_executable(RTInOneWeekend source/main.cpp ${HEADER_PATH})
